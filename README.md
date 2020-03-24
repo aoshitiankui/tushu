@@ -5,16 +5,21 @@
 核心代码：
 //检查用户名密码
 @RequestMapping("login")
+
 	public String login(){
 String userId = SpringApplicationContext.getRequest().getParameter("userId");
-		String passWord = SpringApplicationContext.getRequest().getParameter("passWord");
-		String sql = "select * from users where userId='"+userId+"' and password='"+passWord+"'";
-		DB db = new DB();
-		List<Map<String, Object>> res = db.query(sql);
-		String content = "";
-		if(res==null||res.size()==0){
-			content=("{\"return_code\":\"error\"}");
-		}else{
+
+String passWord = SpringApplicationContext.getRequest().getParameter("passWord");
+		
+String sql = "select * from users where userId='"+userId+"' and password='"+passWord+"'";
+	
+DB db = new DB();
+List<Map<String, Object>> res = db.query(sql);
+String content = "";
+if(res==null||res.size()==0）{
+content=("{\"return_code\":\"error\"}");
+		}else
+		{
 			SpringApplicationContext.getRequest().getSession().setAttribute("user", res.get(0));
 			Map map = res.get(0);
 			content=("{\"return_code\":\"ok\",\"type\":\""+map.get("usertype")+"\"}");
@@ -25,6 +30,7 @@ String userId = SpringApplicationContext.getRequest().getParameter("userId");
 管理员个人信息界面
 核心代码：
 @RequestMapping("updpwd")
+	
 	public String updpwd(){
 		String userId = SpringApplicationContext.getRequest().getParameter("userId");
 		String passWord = SpringApplicationContext.getRequest().getParameter("passWord");
