@@ -25,8 +25,11 @@ content=("{\"return_code\":\"error\"}");
 		Util.printResult(SpringApplicationContext.getResponse(), content, true);
 		return null;
 	}
+	}
 管理员个人信息界面
+
 核心代码：
+
 @RequestMapping("updpwd")
 	
 	public String updpwd(){
