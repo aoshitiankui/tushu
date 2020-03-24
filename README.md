@@ -3,9 +3,7 @@
 
 管理员登录界面
 核心代码：
-
 @RequestMapping("login")
-
 public String login(){
 String userId = SpringApplicationContext.getRequest().getParameter("userId");
 
@@ -18,7 +16,7 @@ List<Map<String, Object>> res = db.query(sql);
 String content = "";
 if(res==null||res.size()==0）{
 content=("{\"return_code\":\"error\"}");
-		}else
+}else
 		{
 			SpringApplicationContext.getRequest().getSession().setAttribute("user", res.get(0));
 			Map map = res.get(0);
