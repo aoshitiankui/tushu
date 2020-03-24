@@ -5,22 +5,17 @@
 
 核心代码：
 
-@RequestMapping("login")
-public String login()
-{
-String userId = SpringApplicationContext.getRequest().getParameter("userId");
-
-String passWord = SpringApplicationContext.getRequest().getParameter("passWord");
-		
-String sql = "select * from users where userId='"+userId+"' and password='"+passWord+"'";
-	
-DB db = new DB();
-List<Map<String, Object>> res = db.query(sql);
-String content = "";
-if(res==null||res.size()==0）{
-content=("{\"return_code\":\"error\"}");
-}else
-		{
+	@RequestMapping("login")
+	public String login(){
+		String userId = SpringApplicationContext.getRequest().getParameter("userId");
+		String passWord = SpringApplicationContext.getRequest().getParameter("passWord");
+		String sql = "select * from users where userId='"+userId+"' and password='"+passWord+"'";
+		DB db = new DB();
+		List<Map<String, Object>> res = db.query(sql);
+		String content = "";
+		if(res==null||res.size()==0){
+			content=("{\"return_code\":\"error\"}");
+		}else{
 			SpringApplicationContext.getRequest().getSession().setAttribute("user", res.get(0));
 			Map map = res.get(0);
 			content=("{\"return_code\":\"ok\",\"type\":\""+map.get("usertype")+"\"}");
@@ -28,7 +23,18 @@ content=("{\"return_code\":\"error\"}");
 		Util.printResult(SpringApplicationContext.getResponse(), content, true);
 		return null;
 	}
-	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 管理员个人信息界面
