@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.1.xsd
+	http://www.springframework.org/schema/cache
+	http://www.springframework.org/schema/cache/spring-cache-3.1.xsd">
+	<!-- 加载包中的controller 注解扫描包 -->
+	<context:component-scan base-package="com" >
+	</context:component-scan>
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<array>
+						<value>text/html;charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+					</array>
+				</property>
+				<property name="objectMapper">
+					<bean class="com.fasterxml.jackson.databind.ObjectMapper">
+						<property name="serializationInclusion">
+							<value type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>
+						</property>
+						<property name="dateFormat">
+							<bean class="java.text.SimpleDateFormat">
+								<constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss" />
+							</bean>
+						</property>
+						<property name="timeZone">
+							<bean class="java.util.TimeZone" factory-method="getTimeZone">
+								<constructor-arg value="Asia/Shanghai" />
+							</bean>
+						</property>
+					</bean>
+				</property>
+
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	<!-- 开启注解 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+	</bean>
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+	<context:annotation-config />
+	<bean name="pathExtensionContentNegotiationStrategy"
+		class="org.springframework.web.accept.PathExtensionContentNegotiationStrategy">
+		<constructor-arg>
+			<props>
+				<prop key="do">application/json</prop>
+				<prop key="xml">application/xml</prop>
+			</props>
+		</constructor-arg>
+	</bean>
+	<!-- 配置映射媒体类型的策略 -->
+	<bean name="mvcContentNegotiationManager"
+		class="org.springframework.web.accept.ContentNegotiationManager">
+		<constructor-arg>
+			<list>
+				<ref bean="pathExtensionContentNegotiationStrategy" />
+			</list>
+		</constructor-arg>
+	</bean>
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.util.SysInteceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<import resource="classpath:/conf-viewResolver.xml" />
+</beans>
+

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.dao.OrderbooksMapper">  
+	<sql id="wheres">
+		<where>
+			<if test="bid !=null and bid !=''.toString()">
+				AND bid like CONCAT('%',CONCAT(#{bid}, '%'))
+			</if>
+			<if test="bnum !=null and bnum !=''.toString()">
+				AND bnum like CONCAT('%',CONCAT(#{bnum}, '%'))
+			</if>
+			<if test="bname !=null and bname !=''.toString()">
+				AND bname like CONCAT('%',CONCAT(#{bname}, '%'))
+			</if>
+			<if test="btype !=null and btype !=''.toString()">
+				AND btype like CONCAT('%',CONCAT(#{btype}, '%'))
+			</if>
+			<if test="bpublish !=null and bpublish !=''.toString()">
+				AND bpublish like CONCAT('%',CONCAT(#{bpublish}, '%'))
+			</if>
+			<if test="publishdate !=null and publishdate !=''.toString()">
+				AND publishdate like CONCAT('%',CONCAT(#{publishdate}, '%'))
+			</if>
+			<if test="pkben !=null and pkben !=''.toString()">
+				AND pkben like CONCAT('%',CONCAT(#{pkben}, '%'))
+			</if>
+			<if test="pfengz !=null and pfengz !=''.toString()">
+				AND pfengz like CONCAT('%',CONCAT(#{pfengz}, '%'))
+			</if>
+			<if test="bbanci !=null and bbanci !=''.toString()">
+				AND bbanci like CONCAT('%',CONCAT(#{bbanci}, '%'))
+			</if>
+			<if test="writer !=null and writer !=''.toString()">
+				AND writer like CONCAT('%',CONCAT(#{writer}, '%'))
+			</if>
+			<if test="traner !=null and traner !=''.toString()">
+				AND traner like CONCAT('%',CONCAT(#{traner}, '%'))
+			</if>
+			<if test="isbn !=null and isbn !=''.toString()">
+				AND isbn like CONCAT('%',CONCAT(#{isbn}, '%'))
+			</if>
+			<if test="mprice !=null and mprice !=''.toString()">
+				AND mprice like CONCAT('%',CONCAT(#{mprice}, '%'))
+			</if>
+			<if test="vprice !=null and vprice !=''.toString()">
+				AND vprice like CONCAT('%',CONCAT(#{vprice}, '%'))
+			</if>
+			<if test="salepoint !=null and salepoint !=''.toString()">
+				AND salepoint like CONCAT('%',CONCAT(#{salepoint}, '%'))
+			</if>
+			<if test="sales !=null and sales !=''.toString()">
+				AND sales like CONCAT('%',CONCAT(#{sales}, '%'))
+			</if>
+			<if test="viewcount !=null and viewcount !=''.toString()">
+				AND viewcount like CONCAT('%',CONCAT(#{viewcount}, '%'))
+			</if>
+			<if test="img !=null and img !=''.toString()">
+				AND img like CONCAT('%',CONCAT(#{img}, '%'))
+			</if>
+			<if test="stores !=null and stores !=''.toString()">
+				AND stores like CONCAT('%',CONCAT(#{stores}, '%'))
+			</if>
+			<if test="instoresdate !=null and instoresdate !=''.toString()">
+				AND instoresdate like CONCAT('%',CONCAT(#{instoresdate}, '%'))
+			</if>
+			<if test="issale !=null and issale !=''.toString()">
+				AND issale like CONCAT('%',CONCAT(#{issale}, '%'))
+			</if>
+			<if test="ratingnum !=null and ratingnum !=''.toString()">
+				AND ratingnum like CONCAT('%',CONCAT(#{ratingnum}, '%'))
+			</if>
+			<if test="isnew !=null and isnew !=''.toString()">
+				AND isnew like CONCAT('%',CONCAT(#{isnew}, '%'))
+			</if>
+			<if test="bdesc !=null and bdesc !=''.toString()">
+				AND bdesc like CONCAT('%',CONCAT(#{bdesc}, '%'))
+			</if>
+			<if test="isadjust !=null and isadjust !=''.toString()">
+				AND isadjust like CONCAT('%',CONCAT(#{isadjust}, '%'))
+			</if>
+				<if test="obid !=null and obid !=''.toString()">
+         		AND obid = #{obid}
+         		</if>
+         		and orid=#{orid}
+		</where>
+	</sql>
+	<insert id="addOrderbooks" parameterType="com.model.OrdersModel">
+		INSERT INTO TBL_ORDERBOOKS (
+		    orid,
+			bid,
+			bnum,
+			bname,
+			btype,
+			bpublish,
+			publishdate,
+			pkben,
+			pfengz,
+			bbanci,
+			writer,
+			traner,
+			isbn,
+			mprice,
+			vprice,
+			salepoint,
+			sales,
+			viewcount,
+			img,
+			stores,
+			instoresdate,
+			issale,
+			ratingnum,
+			isnew,
+			bdesc,
+			isadjust
+		) SELECT
+			#{orid},
+			b.bid,
+			b.bnum,
+			b.bname,
+			b.btype,
+			b.bpublish,
+			b.publishdate,
+			b.pkben,
+			b.pfengz,
+			b.bbanci,
+			b.writer,
+			b.traner,
+			b.isbn,
+			b.mprice,
+			b.vprice,
+			b.salepoint,
+			b.sales,
+			b.viewcount,
+			b.img,
+			c.cnum,
+			b.instoresdate,
+			b.issale,
+			b.ratingnum,
+			b.isnew,
+			b.bdesc,
+			'39'
+		FROM
+			tbl_cart c,
+			tbl_books b
+		WHERE
+			c.bid = b.bid
+		AND c.usersn = #{usersn}
+		AND c.cid in 
+		<foreach collection="checkeds" open="(" close=")" separator="," item="item"  >
+		   #{item}
+		</foreach>
+	</insert>
+	<update id="updOrderbooks" parameterType="com.model.OrderbooksModel">
+		update TBL_ORDERBOOKS set
+
+		isadjust=#{isadjust,jdbcType=VARCHAR}
+		 where 
+		 	obid=#{obid}
+	</update>
+	<update id="delOrderbooks" parameterType="com.model.OrderbooksModel">
+		delete from TBL_ORDERBOOKS
+		 where 
+		 	obid=#{obid}
+	</update>
+	<select id="findOrderbooksById" resultType="com.util.MyHashMap"  parameterType="com.model.OrderbooksModel">
+		select b.*,fun_tr_code(stauts) as statusname  from TBL_ORDERBOOKS b
+		 where 
+		 	obid=#{obid}
+	</select>
+	<select id="findOrderbooksByConditionCount" resultType="java.lang.Integer"  parameterType="com.model.OrderbooksModel">
+		select count(1)  from TBL_ORDERBOOKS
+		 <include refid="wheres"></include>
+	</select>
+	<select id="findOrderbooksByCondition_col" resultType="com.util.MyHashMap" parameterType="com.model.OrderbooksModel"> 
+		obid,
+		bid,
+		bnum,
+		bname,
+		btype,
+		bpublish,
+		publishdate,
+		pkben,
+		pfengz,
+		bbanci,
+		writer,
+		traner,
+		isbn,
+		mprice,
+		vprice,
+		salepoint,
+		sales,
+		viewcount,
+		img,
+		stores,
+		instoresdate,
+		issale,
+		ratingnum,
+		isnew,
+		bdesc,
+		isadjust,adjust,title
+    </select>	
+	<select id="findOrderbooksByCondition" resultType="com.util.MyHashMap"  parameterType="com.model.OrderbooksModel">
+		select ob.*,a.adjust,a.title  from TBL_ORDERBOOKS  ob LEFT JOIN  tbl_adjust a
+								ON ob.obid=a.obid
+		 <include refid="wheres"></include>
+		  order by  ob.obid  desc	  
+	</select>
+</mapper>

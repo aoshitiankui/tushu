@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.dao.MessageMapper">  
+	<sql id="wheres">
+		<where>
+			<if test="email !=null and email !=''.toString()">
+				AND email like CONCAT('%',CONCAT(#{email}, '%'))
+			</if>
+			<if test="mobile !=null and mobile !=''.toString()">
+				AND mobile like CONCAT('%',CONCAT(#{mobile}, '%'))
+			</if>
+			<if test="messages !=null and messages !=''.toString()">
+				AND messages like CONCAT('%',CONCAT(#{messages}, '%'))
+			</if>
+			<if test="mtime !=null and mtime !=''.toString()">
+				AND mtime like CONCAT('%',CONCAT(#{mtime}, '%'))
+			</if>
+			<if test="isdeal !=null and isdeal !=''.toString()">
+				AND isdeal like CONCAT('%',CONCAT(#{isdeal}, '%'))
+			</if>
+			<if test="name !=null and name !=''.toString()">
+				AND name like CONCAT('%',CONCAT(#{name}, '%'))
+			</if>
+			<if test="mtype !=null and mtype !=''.toString()">
+				AND mtype like CONCAT('%',CONCAT(#{mtype}, '%'))
+			</if>
+			<if test="ipaddress !=null and ipaddress !=''.toString()">
+				AND ipaddress like CONCAT('%',CONCAT(#{ipaddress}, '%'))
+			</if>
+			<if test="title !=null and title !=''.toString()">
+				AND title like CONCAT('%',CONCAT(#{title}, '%'))
+			</if>
+				<if test="mid !=null and mid !=''.toString()">
+         		AND mid = #{mid}
+         		</if>
+		</where>
+	</sql>
+	<insert id="addMessage" parameterType="com.model.MessageModel">
+		insert into TBL_MESSAGE(
+		email,
+				mobile,
+				messages,
+				mtime,
+				isdeal,
+				name,
+				mtype,
+				ipaddress,
+				title
+		) values(
+		#{email,jdbcType=VARCHAR},
+				#{mobile,jdbcType=VARCHAR},
+				#{messages,jdbcType=VARCHAR},
+				DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s'),
+				'41',
+				#{name,jdbcType=VARCHAR},
+				#{mtype,jdbcType=VARCHAR},
+				#{ipaddress,jdbcType=VARCHAR},
+				#{title,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="updMessage" parameterType="com.model.MessageModel">
+		update TBL_MESSAGE set
+		email=#{email,jdbcType=VARCHAR},
+		mobile=#{mobile,jdbcType=VARCHAR},
+		messages=#{messages,jdbcType=VARCHAR},
+		 
+		isdeal=#{isdeal,jdbcType=VARCHAR},
+		name=#{name,jdbcType=VARCHAR},
+		mtype=#{mtype,jdbcType=VARCHAR},
+		 
+		title=#{title,jdbcType=VARCHAR}
+		 where 
+		 	mid=#{mid}
+	</update>
+	<update id="delMessage" parameterType="com.model.MessageModel">
+		delete from TBL_MESSAGE
+		 where 
+		 	mid=#{mid}
+	</update>
+	<select id="findMessageById" resultType="com.util.MyHashMap"  parameterType="com.model.MessageModel">
+		select *  from TBL_MESSAGE
+		 where 
+		 	mid=#{mid}
+	</select>
+	<select id="findMessageByConditionCount" resultType="java.lang.Integer"  parameterType="com.model.MessageModel">
+		select count(1)  from TBL_MESSAGE
+		 <include refid="wheres"></include>
+	</select>
+	<select id="findMessageByCondition_col" resultType="com.util.MyHashMap" parameterType="com.model.MessageModel"> 
+		mid,
+		email,
+		mobile,
+		messages,
+		mtime,
+		isdeal,
+		name,
+		mtype,
+		ipaddress,
+		title,
+		fun_tr_code(isdeal) as isdealname,
+		fun_tr_code(mtype) as mtypename
+    </select>	
+	<select id="findMessageByCondition" resultType="com.util.MyHashMap"  parameterType="com.model.MessageModel">
+		select *  from TBL_MESSAGE
+		 <include refid="wheres"></include>
+		  order by  mid  desc	  
+	</select>
+</mapper>

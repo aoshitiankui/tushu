@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.dao.AdjustMapper">  
+	<sql id="wheres">
+		<where>
+			<if test="bid !=null and bid !=''.toString()">
+				AND bid like CONCAT('%',CONCAT(#{bid}, '%'))
+			</if>
+			<if test="examined !=null and examined !=''.toString()">
+				AND examined like CONCAT('%',CONCAT(#{examined}, '%'))
+			</if>
+			<if test="adjust !=null and adjust !=''.toString()">
+				AND adjust like CONCAT('%',CONCAT(#{adjust}, '%'))
+			</if>
+			<if test="username !=null and username !=''.toString()">
+				AND username like CONCAT('%',CONCAT(#{username}, '%'))
+			</if>
+			<if test="adtime !=null and adtime !=''.toString()">
+				AND adtime like CONCAT('%',CONCAT(#{adtime}, '%'))
+			</if>
+				<if test="adid !=null and adid !=''.toString()">
+         		AND adid = #{adid}
+         		</if>
+		</where>
+	</sql>
+	<insert id="addAdjust" parameterType="com.model.AdjustModel">
+		insert into TBL_ADJUST(
+		bid,
+				examined,
+				adjust,
+				username,
+				adtime,
+				title,
+				obid
+		) values(
+		#{bid,jdbcType=VARCHAR},
+				'37',
+				#{adjust,jdbcType=VARCHAR},
+				#{username,jdbcType=VARCHAR},
+				DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s'),
+				#{title,jdbcType=VARCHAR},
+				#{obid,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="updAdjust" parameterType="com.model.AdjustModel">
+		update TBL_ADJUST set
+		bid=#{bid,jdbcType=VARCHAR},
+		examined=#{examined,jdbcType=VARCHAR},
+		adjust=#{adjust,jdbcType=VARCHAR},
+		username=#{username,jdbcType=VARCHAR},
+		adtime=#{adtime,jdbcType=VARCHAR}
+		 where 
+		 	adid=#{adid}
+	</update>
+	<update id="delAdjust" parameterType="com.model.AdjustModel">
+		delete from TBL_ADJUST
+		 where 
+		 	adid=#{adid}
+	</update>
+	<select id="findAdjustById" resultType="com.util.MyHashMap"  parameterType="com.model.AdjustModel">
+		select *  from TBL_ADJUST
+		 where 
+		 	adid=#{adid}
+	</select>
+	<select id="findAdjustByConditionCount" resultType="java.lang.Integer"  parameterType="com.model.AdjustModel">
+		select count(1)  from TBL_ADJUST
+		 <include refid="wheres"></include>
+	</select>
+	<select id="findAdjustByCondition_col" resultType="com.util.MyHashMap" parameterType="com.model.AdjustModel"> 
+		adid,
+		bid,
+		examined,
+		adjust,
+		username,
+		adtime,
+		title,
+		fun_tr_code(examined) as examinedname
+    </select>	
+	<select id="findAdjustByCondition" resultType="com.util.MyHashMap"  parameterType="com.model.AdjustModel">
+		select *  from TBL_ADJUST
+		 <include refid="wheres"></include>
+		  order by  adid  desc	  
+	</select>
+</mapper>

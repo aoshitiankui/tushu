@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.dao.DeptMapper">  
+	<sql id="wheres">
+		<where>
+			<if test="deptname !=null and deptname !=''.toString()">
+				AND deptname like CONCAT('%',CONCAT(#{deptname}, '%'))
+			</if>
+			<if test="deptup !=null and deptup !=''.toString()">
+				AND deptup like CONCAT('%',CONCAT(#{deptup}, '%'))
+			</if>
+			<if test="tel !=null and tel !=''.toString()">
+				AND tel like CONCAT('%',CONCAT(#{tel}, '%'))
+			</if>
+			<if test="fax !=null and fax !=''.toString()">
+				AND fax like CONCAT('%',CONCAT(#{fax}, '%'))
+			</if>
+			<if test="conperson !=null and conperson !=''.toString()">
+				AND conperson like CONCAT('%',CONCAT(#{conperson}, '%'))
+			</if>
+			<if test="conpersonphone !=null and conpersonphone !=''.toString()">
+				AND conpersonphone like CONCAT('%',CONCAT(#{conpersonphone}, '%'))
+			</if>
+			<if test="conaddress !=null and conaddress !=''.toString()">
+				AND conaddress like CONCAT('%',CONCAT(#{conaddress}, '%'))
+			</if>
+			<if test="address !=null and address !=''.toString()">
+				AND address like CONCAT('%',CONCAT(#{address}, '%'))
+			</if>
+			<if test="des !=null and des !=''.toString()">
+				AND des like CONCAT('%',CONCAT(#{des}, '%'))
+			</if>
+				<if test="id !=null and id !=''.toString()">
+         		AND id = #{id}
+         		</if>
+		</where>
+	</sql>
+	<insert id="addDept" parameterType="com.model.DeptModel">
+		insert into DEPT(
+		deptname,
+				deptup,
+				tel,
+				fax,
+				conperson,
+				conpersonphone,
+				conaddress,
+				address,
+				des
+		) values(
+		#{deptname,jdbcType=VARCHAR},
+				#{deptup,jdbcType=VARCHAR},
+				#{tel,jdbcType=VARCHAR},
+				#{fax,jdbcType=VARCHAR},
+				#{conperson,jdbcType=VARCHAR},
+				#{conpersonphone,jdbcType=VARCHAR},
+				#{conaddress,jdbcType=VARCHAR},
+				#{address,jdbcType=VARCHAR},
+				#{des,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="updDept" parameterType="com.model.DeptModel">
+		update DEPT set
+		deptname=#{deptname,jdbcType=VARCHAR},
+		deptup=#{deptup,jdbcType=VARCHAR},
+		tel=#{tel,jdbcType=VARCHAR},
+		fax=#{fax,jdbcType=VARCHAR},
+		conperson=#{conperson,jdbcType=VARCHAR},
+		conpersonphone=#{conpersonphone,jdbcType=VARCHAR},
+		conaddress=#{conaddress,jdbcType=VARCHAR},
+		address=#{address,jdbcType=VARCHAR},
+		des=#{des,jdbcType=VARCHAR}
+		 where 
+		 	id=#{id}
+	</update>
+	<update id="delDept" parameterType="com.model.DeptModel">
+		delete from DEPT
+		 where 
+		 	id=#{id}
+	</update>
+	<select id="findDeptById" resultType="com.util.MyHashMap"  parameterType="com.model.DeptModel">
+		select *  from DEPT
+		 where 
+		 	id=#{id}
+	</select>
+	<select id="findDeptByConditionCount" resultType="java.lang.Integer"  parameterType="com.model.DeptModel">
+		select count(1)  from DEPT
+		 <include refid="wheres"></include>
+	</select>
+	<select id="findDeptByCondition_col" resultType="com.util.MyHashMap" parameterType="com.model.DeptModel"> 
+		id,
+		deptname,
+		deptup,
+		tel,
+		fax,
+		conperson,
+		conpersonphone,
+		conaddress,
+		address,
+		des
+    </select>	
+	<select id="findDeptByCondition" resultType="com.util.MyHashMap"  parameterType="com.model.DeptModel">
+		select *  from DEPT
+		 <include refid="wheres"></include>
+		  order by  id  desc	  
+	</select>
+</mapper>

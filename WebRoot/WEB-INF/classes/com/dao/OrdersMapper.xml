@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.dao.OrdersMapper">  
+	<sql id="wheres">
+		<where>
+		    1=1  
+			<if test="status !=null and status !=''.toString()">
+				AND status =#{status}
+			</if>
+			<if test="address !=null and address !=''.toString()">
+				AND address like CONCAT('%',CONCAT(#{address}, '%'))
+			</if>
+			<if test="mobile !=null and mobile !=''.toString()">
+				AND mobile like CONCAT('%',CONCAT(#{mobile}, '%'))
+			</if>
+			<if test="money !=null and money !=''.toString()">
+				AND money like CONCAT('%',CONCAT(#{money}, '%'))
+			</if>
+			<if test="createtime !=null and createtime !=''.toString()">
+				AND createtime like CONCAT('%',CONCAT(#{createtime}, '%'))
+			</if>
+				<if test="orid !=null and orid !=''.toString()">
+         		AND orid = #{orid}
+         		</if>
+		</where>
+	</sql>
+	<insert id="addOrders" parameterType="com.model.OrdersModel">
+		insert into TBL_ORDERS(
+		orid,
+		usersn,
+				status,
+				address,
+				mobile,
+				money,
+				createtime,
+				orname
+		) values(#{orid},
+		#{usersn,jdbcType=VARCHAR},
+				'32',
+				#{address,jdbcType=VARCHAR},
+				#{mobile,jdbcType=VARCHAR},
+				#{money,jdbcType=DOUBLE} ,
+				DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s'),
+				#{orname,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="updOrders" parameterType="com.model.OrdersModel">
+		update TBL_ORDERS set
+		 
+		status=#{status,jdbcType=VARCHAR}
+		 
+		 
+		 
+		 
+		 
+		 where 
+		 	orid=#{orid}
+	</update>
+	<update id="delOrders" parameterType="com.model.OrdersModel">
+		delete from TBL_ORDERS
+		 where 
+		 	orid=#{orid}
+	</update>
+	<select id="findOrdersById" resultType="com.util.MyHashMap"  parameterType="com.model.OrdersModel">
+		select o.*,fun_tr_code(status) as statusname  from TBL_ORDERS o
+		 where 
+		 	orid=#{orid}
+	</select>
+	<select id="findOrdersByConditionCount" resultType="java.lang.Integer"  parameterType="com.model.OrdersModel">
+		select count(1)  from TBL_ORDERS
+		 <include refid="wheres"></include>
+		<if test="userType!=null and userType=='2'.toString()">
+		 and usersn=#{usersn}
+		 </if>
+	</select>
+	<select id="findOrdersByCondition_col" resultType="com.util.MyHashMap" parameterType="com.model.OrdersModel"> 
+		orid,
+		usersn,
+		status,
+		address,
+		mobile,
+		money,
+		createtime,
+		orname,
+		fun_tr_code(status) as statusname
+    </select>	
+	<select id="findOrdersByCondition" resultType="com.util.MyHashMap"  parameterType="com.model.OrdersModel">
+		select *  from TBL_ORDERS
+		 <include refid="wheres"></include>
+		 <if test="userType!=null and userType=='2'.toString()">
+		 and usersn=#{usersn}
+		 </if>
+		  order by  createtime  desc	  
+	</select>
+</mapper>

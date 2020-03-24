@@ -1,0 +1,28 @@
+
+.table-striped>tbody>tr>td.active:hover,.table-hover>tbody>tr>th.active:hover,.table-hover>tbody>tr.active:hover>td,.table-hover>tbody>tr:hover>.active,.table-hover>tbody>tr.active:hover>th {
+    background-color: #e8e8e8
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td,.table-striped>tbody>tr:nth-child(odd)>th {
+    background-color: #f5f5f5
+}
+
+.table-striped>tbody>tr.selected>td {
+    background-color: #e8e8e8
+}
+
+.modal-open .modal {
+    overflow-x: hidden;
+     overflow-y: hidden; /* 弹出2个 第二个计算 了滚动长效的宽度，有偏移 */
+}
+
+.modal-header {
+    background:#e8e8e8;
+}
+.graypanel-heading{
+	 background:#e8e8e8;
+}
+input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0px 1000px white inset;
+	border: 1px solid #CCC!important;
+}

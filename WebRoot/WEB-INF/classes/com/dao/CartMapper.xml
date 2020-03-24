@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.dao.CartMapper">  
+	<sql id="wheres">
+		<where>
+			<if test="usersn !=null and usersn !=''.toString()">
+				AND usersn like CONCAT('%',CONCAT(#{usersn}, '%'))
+			</if>
+			<if test="cnum !=null and cnum !=''.toString()">
+				AND cnum like CONCAT('%',CONCAT(#{cnum}, '%'))
+			</if>
+				<if test="cid !=null and cid !=''.toString()">
+         		AND cid = #{cid}
+         		</if>
+		</where>
+	</sql>
+	<insert id="addCart" parameterType="com.model.CartModel">
+		insert into TBL_CART(
+		usersn,
+		cnum,bid
+		) values(
+		#{usersn,jdbcType=VARCHAR},
+				#{cnum},#{bid,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<select  id="checkaddCart"  resultType="com.model.CartModel" parameterType="com.model.CartModel">
+		select * from TBL_CART where BID=#{bid} and usersn=#{usersn}
+	</select>
+	<update id="updCartThrothAdd" parameterType="com.model.CartModel">
+		update TBL_CART set
+		cnum=cnum+#{cnum}
+		 where 
+		 	cid=#{cid}
+	</update>
+	<update id="updCart" parameterType="com.model.CartModel">
+		update TBL_CART set
+		cnum=#{cnum,jdbcType=VARCHAR}
+		 where 
+		 	cid=#{cid}
+	</update>
+	<update id="delCart" parameterType="com.model.CartModel">
+ 			delete from tbl_cart   where  cid in
+		<foreach collection="checkeds" open="(" close=")" separator="," item="item"  >
+		   #{item}
+		</foreach>
+	</update>
+	<delete id="deleteCausBuybooks" parameterType="com.model.OrdersModel">
+ 			delete from tbl_cart   where  cid in
+		<foreach collection="checkeds" open="(" close=")" separator="," item="item"  >
+		   #{item}
+		</foreach>
+	</delete>	
+	<select id="findCartOfMini" resultType="com.util.MyHashMap"  parameterType="com.model.CartModel">
+			select IFNULL(sum(c.cnum),0) num ,IFNULL(sum(b.vprice*c.cnum),0) money from  TBL_CART c ,tbl_books b 
+		 where c.bid =b.bid and c.usersn= #{usersn}
+	</select>
+	<select id="findCartById" resultType="com.util.MyHashMap"  parameterType="com.model.CartModel">
+	    	select c.cid,c.cnum,b.bnum,b.bname,b.img  from TBL_CART c ,tbl_books b
+          where  c.bid=b.bid and c.cid=#{cid}  
+ 
+	</select>
+	<select id="findCartByConditionCount" resultType="java.lang.Integer"  parameterType="com.model.CartModel">
+	select count(1)  from TBL_CART c ,tbl_books b
+          where  c.bid=b.bid and c.usersn=#{usersn}  
+	</select>
+	<select id="findCartByCondition_col" resultType="com.util.MyHashMap" parameterType="com.model.CartModel"> 
+    cid, cnum, bnum, bname,img,mprice,vprice,salepoint
+    </select>	
+	<select id="findCartByCondition" resultType="com.util.MyHashMap"  parameterType="com.model.CartModel">
+	select c.cid,c.cnum,b.bnum,b.bname,b.img, b.mprice,
+b.vprice,
+b.salepoint  from TBL_CART c ,tbl_books b
+          where  c.bid=b.bid and c.usersn=#{usersn}  
+	</select>
+</mapper>

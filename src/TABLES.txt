@@ -1,0 +1,95 @@
+
+CREATE TABLE TBL_BOOKS 
+(
+		bid integer
+		,bnum varchar(100)
+		,bname varchar(200)
+		,btype varchar(100)
+		,bpublish varchar(200)
+		,publishdate varchar(100)
+		,pkben varchar(200)
+		,pfengz varchar(200)
+		,bbanci varchar(200)
+		,writer varchar(200)
+		,traner varchar(200)
+		,isbn varchar(200)
+		,mprice integer
+		,vprice integer
+		,salepoint varchar(200)
+		,sales varchar(200)
+		,viewcount varchar(200)
+		,img varchar(200)
+		,stores varchar(200)
+		,instoresdate varchar(200)
+		,issale varchar(200)
+		,ratingnum integer
+		,isnew varchar(200)
+		,bdesc varchar(4000)
+);
+CREATE TABLE TBL_CART 
+(
+		cid integer
+		,usersn varchar(100)
+		,cnum integer
+);
+CREATE TABLE TBL_ORDERS 
+(
+		orid integer
+		,usersn varchar(100)
+		,stauts varchar(100)
+		,address varchar(500)
+		,mobile varchar(100)
+		,money integer
+		,createtime varchar(100)
+);
+CREATE TABLE TBL_ADJUST 
+(
+		adid integer
+		,bid varchar(100)
+		,examined varchar(100)
+		,adjust varchar(1000)
+		,username varchar(100)
+		,adtime varchar(100)
+);
+CREATE TABLE TBL_ORDERBOOKS 
+(
+		obid integer
+		,bid integer
+		,bnum varchar(100)
+		,bname varchar(200)
+		,btype varchar(100)
+		,bpublish varchar(200)
+		,publishdate varchar(100)
+		,pkben varchar(200)
+		,pfengz varchar(200)
+		,bbanci varchar(200)
+		,writer varchar(200)
+		,traner varchar(200)
+		,isbn varchar(200)
+		,mprice integer
+		,vprice integer
+		,salepoint varchar(200)
+		,sales varchar(200)
+		,viewcount varchar(200)
+		,img varchar(200)
+		,stores varchar(200)
+		,instoresdate varchar(200)
+		,issale varchar(200)
+		,ratingnum integer
+		,isnew varchar(200)
+		,bdesc varchar(4000)
+		,isadjust varchar(100)
+);
+CREATE TABLE TBL_MESSAGE 
+(
+		mid integer
+		,email varchar(100)
+		,mobile varchar(100)
+		,messages varchar(3000)
+		,mtime varchar(100)
+		,isdeal varchar(100)
+		,name varchar(100)
+		,mtype varchar(100)
+		,ipaddress varchar(100)
+		,title varchar(500)
+);

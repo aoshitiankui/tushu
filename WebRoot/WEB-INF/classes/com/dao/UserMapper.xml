@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.dao.UserMapper">  
+	<sql id="wheres">
+		<where>
+			<if test="userid !=null and userid !=''.toString()">
+				AND userid like CONCAT('%',CONCAT(#{userid}, '%'))
+			</if>
+			<if test="username !=null and username !=''.toString()">
+				AND username like CONCAT('%',CONCAT(#{username}, '%'))
+			</if>
+			<if test="password !=null and password !=''.toString()">
+				AND password like CONCAT('%',CONCAT(#{password}, '%'))
+			</if>
+			<if test="usertype !=null and usertype !=''.toString()">
+				AND usertype like CONCAT('%',CONCAT(#{usertype}, '%'))
+			</if>
+			<if test="dept !=null and dept !=''.toString()">
+				AND dept like CONCAT('%',CONCAT(#{dept}, '%'))
+			</if>
+			<if test="mobile !=null and mobile !=''.toString()">
+				AND mobile like CONCAT('%',CONCAT(#{mobile}, '%'))
+			</if>
+			<if test="tel !=null and tel !=''.toString()">
+				AND tel like CONCAT('%',CONCAT(#{tel}, '%'))
+			</if>
+			<if test="email !=null and email !=''.toString()">
+				AND email like CONCAT('%',CONCAT(#{email}, '%'))
+			</if>
+			<if test="qq !=null and qq !=''.toString()">
+				AND qq like CONCAT('%',CONCAT(#{qq}, '%'))
+			</if>
+			<if test="img !=null and img !=''.toString()">
+				AND img like CONCAT('%',CONCAT(#{img}, '%'))
+			</if>
+			<if test="address !=null and address !=''.toString()">
+				AND address like CONCAT('%',CONCAT(#{address}, '%'))
+			</if>
+			<if test="mem !=null and mem !=''.toString()">
+				AND mem like CONCAT('%',CONCAT(#{mem}, '%'))
+			</if>
+				<if test="usersn !=null and usersn !=''.toString()">
+         		AND usersn = #{usersn}
+         		</if>
+		</where>
+	</sql>
+	<insert id="addUser" parameterType="com.model.UserModel">
+		insert into users(
+		userid,
+				username,
+				password,
+				usertype,
+				dept,
+				mobile,
+				tel,
+				email,
+				qq,
+				img,
+				address,
+				mem,
+				wallet
+		) values(
+		#{userid,jdbcType=VARCHAR},
+				#{username,jdbcType=VARCHAR},
+				#{password,jdbcType=VARCHAR},
+				#{usertype,jdbcType=VARCHAR},
+				#{dept,jdbcType=VARCHAR},
+				#{mobile,jdbcType=VARCHAR},
+				#{tel,jdbcType=VARCHAR},
+				#{email,jdbcType=VARCHAR},
+				#{qq,jdbcType=VARCHAR},
+				#{img,jdbcType=VARCHAR},
+				#{address,jdbcType=VARCHAR},
+				#{mem,jdbcType=VARCHAR},
+				#{wallet,jdbcType=DOUBLE}
+		)
+	</insert>
+	<update id="updUser" parameterType="com.model.UserModel">
+		update users set
+		userid=#{userid,jdbcType=VARCHAR},
+		username=#{username,jdbcType=VARCHAR},
+		password=#{password,jdbcType=VARCHAR},
+		usertype=#{usertype,jdbcType=VARCHAR},
+		dept=#{dept,jdbcType=VARCHAR},
+		mobile=#{mobile,jdbcType=VARCHAR},
+		tel=#{tel,jdbcType=VARCHAR},
+		email=#{email,jdbcType=VARCHAR},
+		qq=#{qq,jdbcType=VARCHAR},
+		img=#{img,jdbcType=VARCHAR},
+		address=#{address,jdbcType=VARCHAR},
+		mem=#{mem,jdbcType=VARCHAR},
+		wallet=#{wallet,jdbcType=DOUBLE}
+		 where 
+		 	usersn=#{usersn}
+	</update>
+	<update id="delUser" parameterType="com.model.UserModel">
+		delete from users
+		 where 
+		 	usersn=#{usersn}
+	</update>
+	<select id="findUserById" resultType="com.util.MyHashMap"  parameterType="com.model.UserModel">
+		select *  from users
+		 where 
+		 	usersn=#{usersn}
+	</select>
+	<select id="findUserByConditionCount" resultType="java.lang.Integer"  parameterType="com.model.UserModel">
+		select count(1)  from users
+		 <include refid="wheres"></include>
+	</select>
+	<select id="findUserByCondition_col" resultType="com.util.MyHashMap" parameterType="com.model.UserModel"> 
+		usersn,
+		userid,
+		username,
+		password,
+		usertype,
+		dept,
+		mobile,
+		tel,
+		email,
+		qq,
+		img,
+		address,
+		mem,
+		wallet,
+		fun_tr_code(usertype) as usertypename
+		 
+    </select>	
+	<select id="findUserByCondition" resultType="com.util.MyHashMap"  parameterType="com.model.UserModel">
+		select *  from users
+		 <include refid="wheres"></include>
+		  order by  usersn  desc	  
+	</select>
+</mapper>

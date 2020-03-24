@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.dao.CodesMapper">  
+	<sql id="wheres">
+		<where>
+			<if test="codetype !=null and codetype !=''.toString()">
+				AND codetype like CONCAT('%',CONCAT(#{codetype}, '%'))
+			</if>
+			<if test="codename !=null and codename !=''.toString()">
+				AND codename like CONCAT('%',CONCAT(#{codename}, '%'))
+			</if>
+			<if test="ordernum !=null and ordernum !=''.toString()">
+				AND ordernum like CONCAT('%',CONCAT(#{ordernum}, '%'))
+			</if>
+			<if test="pid !=null and pid !=''.toString()">
+				AND pid like CONCAT('%',CONCAT(#{pid}, '%'))
+			</if>
+			<if test="codetypename !=null and codetypename !=''.toString()">
+				AND codetypename like CONCAT('%',CONCAT(#{codetypename}, '%'))
+			</if>
+				<if test="id !=null and id !=''.toString()">
+         		AND id = #{id}
+         		</if>
+		</where>
+	</sql>
+	<insert id="addCodes" parameterType="com.model.CodesModel">
+		insert into codes(
+		codetype,
+				codename,
+				ordernum,
+				pid,
+				codetypename
+		) values(
+		#{codetype,jdbcType=VARCHAR},
+				#{codename,jdbcType=VARCHAR},
+				#{ordernum,jdbcType=DOUBLE} ,
+				#{pid,jdbcType=DOUBLE} ,
+				#{codetypename,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="updCodes" parameterType="com.model.CodesModel">
+		update codes set
+		codetype=#{codetype,jdbcType=VARCHAR},
+		codename=#{codename,jdbcType=VARCHAR},
+		ordernum=#{ordernum,jdbcType=DOUBLE},
+		pid=#{pid,jdbcType=VARCHAR},
+		codetypename=#{codetypename,jdbcType=VARCHAR}
+		 where 
+		 	id=#{id}
+	</update>
+	<update id="delCodes" parameterType="com.model.CodesModel">
+		delete from codes
+		 where 
+		 	id=#{id}
+	</update>
+	<select id="findCodesById" resultType="com.util.MyHashMap"  parameterType="com.model.CodesModel">
+		select *  from codes
+		 where 
+		 	id=#{id}
+	</select>
+	<select id="findCodesByConditionCount" resultType="java.lang.Integer"  parameterType="com.model.CodesModel">
+		select count(1)  from codes
+		 <include refid="wheres"></include>
+	</select>
+	<select id="findCodesByCondition_col" resultType="com.util.MyHashMap" parameterType="com.model.CodesModel"> 
+		id,
+		codetype,
+		codename,
+		ordernum,
+		pid,
+		codetypename
+    </select>	
+	<select id="findCodesByCondition" resultType="com.util.MyHashMap"  parameterType="com.model.CodesModel">
+		select *  from codes
+		 <include refid="wheres"></include>
+		  order by  id  desc	  
+	</select>
+</mapper>
