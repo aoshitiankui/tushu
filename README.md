@@ -3,10 +3,10 @@
 
 管理员登录界面
 核心代码：
-//检查用户名密码
+
 @RequestMapping("login")
 
-	public String login(){
+public String login(){
 String userId = SpringApplicationContext.getRequest().getParameter("userId");
 
 String passWord = SpringApplicationContext.getRequest().getParameter("passWord");
