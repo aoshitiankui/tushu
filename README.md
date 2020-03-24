@@ -2,9 +2,12 @@
 图书商城系统采用B/S结构(Browser/Server,浏览器/服务器结构)和基于Web服务两种模式，是一个适用于Internet环境下的模型结构。
 
 管理员登录界面
+
 核心代码：
+
 @RequestMapping("login")
-public String login(){
+public String login()
+{
 String userId = SpringApplicationContext.getRequest().getParameter("userId");
 
 String passWord = SpringApplicationContext.getRequest().getParameter("passWord");
